@@ -10,19 +10,10 @@ type MovieType = {
   original_title: string;
 };
 
-export default function Home() {
-  const [movies, setMovies] = useState<MovieType[]>([]);
-  useEffect(() => {
-    (async () => {
-      const response = await fetch(`/api/movies`);
-      const { results } = await response.json();
-      setMovies(results);
-    })();
-  }, []);
+export default function Home({ results }) {
   return (
     <>
       <Seo title="Home" />
-      {!movies && <h4>Loading...</h4>}
       {movies?.map((movie) => (
         <div key={movie.id}>
           <h4>{movie.original_title}</h4>
@@ -30,4 +21,15 @@ export default function Home() {
       ))}
     </>
   );
+}
+
+export async function getServerSideProps() {
+  const response = await fetch(`http://localhost:3000/api/movies`);
+  const { results } = await response.json();
+
+  return {
+    props: {
+      results,
+    },
+  };
 }
