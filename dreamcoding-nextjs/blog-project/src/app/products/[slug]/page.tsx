@@ -1,12 +1,21 @@
 import { notFound } from 'next/navigation';
 
+export const revalidate = 600; // 기본적으로 app의 page들은 SSG에 해당 한다. revalidate 값은 default false
+// revalidate값을 주면 주어진 시간 마다 Page를 새로 렌더링 하는 ISR이 된다. 
+
 type Props = {
   params: {
     slug: string;
   };
 };
-
 // [slug] 외에도 여러 라우팅이 올 수 있는 [...slug] 와 옵셔널인 [[...slug]]가 있다.
+
+
+export function generateMetadata({params}: Props) {
+  return {
+    title: `제품의 이름 : ${params}`
+  }
+}
 
 const PantsPageDetail = ({ params }: Props) => {
   if (params.slug === 'nothing') {
